@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>SI-TAPAK - Sistem Telusur Halal &amp; Profitabilitas Peternakan</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overscroll-behavior: none;
+    }
+    .font-mono-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-feature-settings: 'tnum' on, 'lnum' on;
+    }
+  </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-white border-b border-slate-200/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+<div class="px-6 h-16 flex items-center justify-between gap-4">
+<!-- Brand & Title -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#166534] flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-extrabold text-slate-900 tracking-tight text-lg">SI-TAPAK</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/80">Agritech v4.2</span>
+</div>
+<p class="text-xs text-slate-500 font-medium">Sistem Telusur Halal &amp; Profitabilitas Peternakan</p>
+</div>
+</div>
+<div class="hidden lg:block h-6 w-px bg-slate-200 mx-1"></div>
+<!-- Operational Context Chips -->
+<div class="hidden lg:flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-lg text-xs border border-slate-200/80">
+<span class="material-symbols-outlined text-slate-500 text-[16px]">domain</span>
+<span class="text-slate-500">Unit:</span>
+<span class="font-semibold text-slate-800">Closed-House Alpha-01</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-lg text-xs border border-slate-200/80">
+<span class="material-symbols-outlined text-amber-700 text-[16px]">inventory_2</span>
+<span class="text-slate-500">Batch:</span>
+<span class="font-mono-val font-semibold text-slate-800">#BR-2025-04</span>
+<span class="text-slate-400 font-normal">(Hari ke-24)</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-lg text-xs border border-slate-200/80">
+<span class="material-symbols-outlined text-[#166534] text-[16px]">groups</span>
+<span class="text-slate-500">Populasi:</span>
+<span class="font-mono-val font-semibold text-slate-800">4,850 Ekor</span>
+</div>
+</div>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-3">
+<!-- Live System Status -->
+<div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50/70 border border-emerald-200/70 text-[#166534] text-xs">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#166534]"></span>
+</span>
+<span class="font-semibold">Sistem Operasional</span>
+<span class="text-emerald-300">|</span>
+<span class="text-[#166534] font-medium">SJPH Terverifikasi</span>
+</div>
+<!-- Clock (WIB) -->
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-600 text-xs font-mono-val">
+<span class="material-symbols-outlined text-slate-400 text-[15px]">schedule</span>
+<span id="system-clock">18 Mei 2025 · 14:48 WIB</span>
+</div>
+<!-- Action: Export -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#166534] hover:bg-[#14532d] text-white font-medium text-xs shadow-sm transition-all duration-150">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Ekspor Laporan Audit</span>
+</button>
+<!-- Profile Avatar -->
+<div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-semibold text-xs cursor-pointer hover:bg-slate-200 transition">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Dashboard Content -->
+<main class="flex-1 max-w-[1720px] w-full mx-auto px-6 py-6 flex flex-col gap-6">
+<!-- KPI Summary Bar (4 Cards) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- KPI 1: Kelengkapan Dokumen SJPH -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-slate-300 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Kelengkapan Dokumen SJPH</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/70">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Siap Audit
+          </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-mono-val text-3xl font-bold text-slate-900">98.4%</span>
+<span class="text-xs text-slate-500 font-medium">dari total 50 poin</span>
+</div>
+<p class="text-xs text-slate-500 mb-3">49 dari 50 Dokumen Terverifikasi BPJPH</p>
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#15803d] h-1.5 rounded-full" style="width: 98.4%"></div>
+</div>
+</div>
+<!-- KPI 2: Traceability Pakan -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-slate-300 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Traceability Bahan Pakan</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/70">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+            100% Valid
+          </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-mono-val text-3xl font-bold text-slate-900">100%</span>
+<span class="text-xs text-[#166534] font-medium font-mono-val">3/3 Bahan Lolos</span>
+</div>
+<p class="text-xs text-slate-500 mb-3">Lot #PK-8821 · Suplier Terakreditasi Halal</p>
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#15803d] h-1.5 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<!-- KPI 3: Countdown SJPH -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-slate-300 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Hari Menuju Audit SJPH</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+            Countdown
+          </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-mono-val text-3xl font-bold text-amber-800">6</span>
+<span class="text-sm font-semibold text-slate-600">Hari Lagi</span>
+</div>
+<p class="text-xs text-slate-500 mb-3">Simulasi Audit: 24 Mei 2025 (Kandang 1)</p>
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#b45309] h-1.5 rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<!-- KPI 4: Potensi Penghematan Biaya -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-slate-300 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Potensi Penghematan Biaya</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/70">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+            Efisiensi FCR
+          </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-mono-val text-2xl lg:text-3xl font-bold text-slate-900">Rp 14.850.000</span>
+</div>
+<p class="text-xs text-slate-500 mb-3">+12.4% Optimalisasi (Target FCR: 1.48)</p>
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#15803d] h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</section>
+<!-- 3-Column Core Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- COLUMN 1: Parameter & Sertifikasi Pakan (4 Cols) -->
+<section class="lg:col-span-4 flex flex-col gap-5">
+<!-- Header Column -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded bg-slate-700"></span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-800">Parameter &amp; Sertifikasi Pakan</h2>
+</div>
+<span class="px-2 py-0.5 text-[11px] font-medium text-slate-500 bg-white border border-slate-200 rounded">Real-Time</span>
+</div>
+<!-- Card: Stok Pakan Aktif -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-4">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stok Pakan Aktif</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-mono-val text-3xl font-bold text-slate-900">12.450</span>
+<span class="text-sm text-slate-500 font-semibold">kg</span>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-2.5 py-0.5 bg-emerald-50 border border-emerald-200 text-[#166534] font-semibold text-xs rounded">
+                83% Kapasitas
+              </span>
+<span class="block text-[11px] text-slate-400 mt-1">2 Silo Terkoneksi</span>
+</div>
+</div>
+<!-- Silo breakdown bars -->
+<div class="space-y-3 bg-slate-50/70 p-3.5 rounded-lg border border-slate-100">
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Silo Alpha (Pre-Starter)</span>
+<span class="font-mono-val font-semibold text-slate-800">7.200 kg <span class="text-slate-400 font-normal">/ 8.000 kg</span></span>
+</div>
+<div class="w-full bg-slate-200/80 rounded-full h-1.5">
+<div class="bg-slate-700 h-1.5 rounded-full" style="width: 90%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Silo Beta (Finisher)</span>
+<span class="font-mono-val font-semibold text-slate-800">5.250 kg <span class="text-slate-400 font-normal">/ 7.000 kg</span></span>
+</div>
+<div class="w-full bg-slate-200/80 rounded-full h-1.5">
+<div class="bg-[#15803d] h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+<!-- Consumption rate pill -->
+<div class="flex items-center justify-between text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
+<div class="flex items-center gap-1.5 text-slate-600">
+<span class="material-symbols-outlined text-[16px] text-amber-700">local_fire_department</span>
+<span>Laju Konsumsi: <strong class="text-slate-800 font-mono-val">480 kg/hari</strong></span>
+</div>
+<span class="font-medium text-[#166534] font-mono-val bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/70">Aman ~25.9 Hari</span>
+</div>
+</div>
+<!-- Card: Biaya Pakan -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Biaya Pakan per Kg</span>
+<span class="inline-flex items-center gap-1 text-xs font-semibold text-[#166534] bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+              -Rp 250 vs Baseline
+            </span>
+</div>
+<div class="flex items-baseline justify-between pt-1">
+<div>
+<span class="font-mono-val text-2xl font-bold text-slate-900">Rp 8.750</span>
+<span class="text-xs text-slate-500">/kg</span>
+</div>
+<div class="text-right">
+<div class="text-[11px] text-slate-500">Total Akumulasi Periode</div>
+<div class="font-mono-val text-sm font-bold text-slate-800">Rp 108.937.500</div>
+</div>
+</div>
+</div>
+<!-- Card: Status Sertifikat Halal Pakan -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sertifikasi Halal Pakan</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#166534] bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-[#15803d]"></span>
+              BPJPH Aktif
+            </span>
+</div>
+<div class="p-3 bg-slate-50/70 rounded-lg border border-slate-200/70">
+<div class="flex items-center justify-between">
+<span class="font-mono-val text-xs font-bold text-slate-800">SH No: ID32110001892830823</span>
+<span class="text-[10px] font-bold text-[#166534] uppercase bg-white px-2 py-0.5 rounded border border-emerald-200/70">Terdaftar</span>
+</div>
+<div class="text-xs text-slate-500 mt-1">
+              Masa Berlaku s/d: <strong class="text-slate-700 font-mono-val">28 November 2027</strong>
+</div>
+</div>
+<!-- Raw Materials Verified -->
+<div>
+<div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Bahan Baku Terverifikasi Halal:</div>
+<div class="space-y-1.5 text-xs text-slate-700">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#15803d] text-[16px]">check_circle</span>
+<span>Bungkil Kedelai Halal (Non-GMO Verified)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#15803d] text-[16px]">check_circle</span>
+<span>Jagung Pipil Grade-A Domestik</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#15803d] text-[16px]">check_circle</span>
+<span>Premix &amp; Suplemen Mineral Halal MUI</span>
+</div>
+</div>
+</div>
+<!-- Ledger Hash Link -->
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="font-mono-val text-slate-400 text-[11px]">
+              HASH: <span class="text-slate-600 font-semibold">0x8F92...B31A</span>
+</div>
+<a class="inline-flex items-center gap-1 font-semibold text-[#166534] hover:text-[#14532d]" href="#">
+<span>Cek Ledger BPJPH</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="w-full py-2 px-3 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center gap-1.5 transition">
+<span class="material-symbols-outlined text-[16px] text-[#166534]">add_circle</span>
+<span>Input Pakan</span>
+</button>
+<button class="w-full py-2 px-3 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center gap-1.5 transition">
+<span class="material-symbols-outlined text-[16px] text-slate-500">history</span>
+<span>Log Suplier</span>
+</button>
+</div>
+</div>
+</section>
+<!-- COLUMN 2: Audit Readiness & Profitability Engine (4 Cols) -->
+<section class="lg:col-span-4 flex flex-col gap-5">
+<!-- Header Column -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded bg-[#15803d]"></span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-800">Audit SJPH &amp; Profit Engine</h2>
+</div>
+<span class="px-2 py-0.5 text-[11px] font-semibold text-[#166534] bg-emerald-50 border border-emerald-200/70 rounded">CVP Live Mode</span>
+</div>
+<!-- Audit Readiness Semi-Circle Gauge Card -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Kesiapan Audit SJPH</span>
+<span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/70">Sangat Siap</span>
+</div>
+<!-- Clean Ergonomic SVG Semi-Gauge -->
+<div class="relative w-48 h-28 mx-auto flex items-end justify-center my-1">
+<svg class="w-48 h-28" viewbox="0 0 200 110">
+<!-- Background Arc -->
+<path class="text-slate-100" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="14"></path>
+<!-- Forest Green Progress Arc (98.4%) -->
+<path class="text-[#15803d]" d="M 20 100 A 80 80 0 0 1 178 95" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="14"></path>
+</svg>
+<div class="absolute bottom-1 text-center">
+<div class="font-mono-val text-3xl font-bold text-slate-900 leading-none">98.4</div>
+<div class="text-[10px] uppercase font-bold text-slate-400 mt-1 tracking-wider">Indeks SJPH / 100</div>
+</div>
+</div>
+<!-- 4 Pillars Checklist -->
+<div class="space-y-2 mt-4 bg-slate-50/70 p-3 rounded-lg border border-slate-100 text-xs">
+<div class="flex justify-between items-center">
+<span class="text-slate-600">1. Komitmen &amp; Tanggung Jawab</span>
+<span class="font-mono-val font-bold text-[#166534]">100%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600">2. Bahan Pakan &amp; Air Minum</span>
+<span class="font-mono-val font-bold text-[#166534]">100%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600">3. Pemeliharaan Halal (Animal Welfare)</span>
+<span class="font-mono-val font-bold text-slate-700">96.0%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600">4. Kemitraan RPA Halal &amp; Distribusi</span>
+<span class="font-mono-val font-bold text-[#166534]">98.0%</span>
+</div>
+</div>
+</div>
+<!-- BEP Predictor Card -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Prediksi Titik Impas (BEP)</span>
+<span class="text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded">Hari ke-28</span>
+</div>
+<div class="p-3 bg-amber-50/40 rounded-lg border border-amber-200/50 flex flex-col gap-1">
+<div class="text-[11px] font-medium text-amber-900">Ambang Batas BEP Panen</div>
+<div class="font-mono-val text-2xl font-bold text-slate-900">
+              3.120 Ekor <span class="text-xs font-normal text-slate-600">/ Rp 17.200 per Kg</span>
+</div>
+<div class="flex items-center justify-between text-xs text-slate-600 pt-1 border-t border-amber-200/40 mt-1">
+<span>Estimasi Bobot: <strong class="text-slate-900 font-mono-val">2.15 kg/ekor</strong></span>
+<span>Margin Proyeksi: <strong class="text-[#166534] font-mono-val">24.8%</strong></span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg border border-slate-200/70 text-xs">
+<span class="text-slate-600">Proyeksi Laba Bersih Panen</span>
+<span class="font-mono-val font-bold text-[#166534] text-sm">Rp 38.620.000</span>
+</div>
+</div>
+<!-- CVP Interactive Chart Card -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Analisis Cost-Volume-Profit (CVP)</span>
+<button class="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 transition">
+<span class="material-symbols-outlined text-[15px]">tune</span>
+<span>Simulasi</span>
+</button>
+</div>
+<!-- Ergonomic SVG Line Chart -->
+<div class="w-full bg-slate-50/70 p-3 rounded-lg border border-slate-100 relative">
+<svg class="w-full h-36" fill="none" viewbox="0 0 320 140">
+<!-- Gridlines -->
+<line stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" x1="30" x2="310" y1="20" y2="20"></line>
+<line stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" x1="30" x2="310" y1="55" y2="55"></line>
+<line stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" x1="30" x2="310" y1="90" y2="90"></line>
+<line stroke="#cbd5e1" stroke-width="1" x1="30" x2="310" y1="120" y2="120"></line>
+<!-- Axes Y -->
+<line stroke="#cbd5e1" stroke-width="1" x1="30" x2="30" y1="10" y2="120"></line>
+<!-- Profit Shaded Area after BEP -->
+<polygon fill="#166534" fill-opacity="0.08" points="190,75 305,25 305,58"></polygon>
+<!-- Fixed Cost Line (Dashed Slate) -->
+<line stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1.5" x1="30" x2="305" y1="95" y2="95"></line>
+<!-- Total Cost Line (Warm Ochre #b45309) -->
+<path d="M 30 95 L 305 58" stroke="#b45309" stroke-linecap="round" stroke-width="2.2"></path>
+<!-- Revenue Line (Muted Forest Green #15803d) -->
+<path d="M 30 120 L 305 25" stroke="#15803d" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- BEP Intersection Marker -->
+<circle cx="190" cy="74" fill="#b45309" r="4.5"></circle>
+<circle cx="190" cy="74" fill="none" r="8" stroke="#b45309" stroke-opacity="0.3" stroke-width="1.5"></circle>
+<!-- Marker Label -->
+<rect fill="#ffffff" height="18" rx="3" stroke="#e2e8f0" width="105" x="135" y="48"></rect>
+<text fill="#78350f" font-family="JetBrains Mono" font-size="8.5" font-weight="700" x="140" y="61">BEP: 3.120 Ekor</text>
+</svg>
+<!-- Chart Horizontal Axis Labels -->
+<div class="flex justify-between text-[10px] font-mono-val text-slate-500 px-6 pt-1">
+<span>0</span>
+<span>1.500</span>
+<span class="text-amber-800 font-bold">3.120 (BEP)</span>
+<span>4.850 Ekor</span>
+</div>
+</div>
+<!-- Chart Legend -->
+<div class="flex items-center justify-between text-xs text-slate-600 px-1 pt-1">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-[#15803d] rounded-full"></span>
+<span>Pendapatan</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-[#b45309] rounded-full"></span>
+<span>Total Biaya</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-slate-400 rounded-full"></span>
+<span>Biaya Tetap</span>
+</div>
+</div>
+</div>
+</section>
+<!-- COLUMN 3: Digital Twin Alur Telusur & Log (4 Cols) -->
+<section class="lg:col-span-4 flex flex-col gap-5">
+<!-- Header Column -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded bg-amber-700"></span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-800">Digital Twin Alur Telusur</h2>
+</div>
+<span class="px-2 py-0.5 text-[11px] font-medium text-slate-600 bg-white border border-slate-200 rounded">4 Node Aktif</span>
+</div>
+<!-- Vertical Supply Chain Pipeline Container -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-3">
+<!-- Node 1: Silo Pakan -->
+<div class="bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-md bg-slate-100 text-slate-700 border border-slate-200/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-[17px]">inventory_2</span>
+</div>
+<div>
+<div class="text-xs font-bold text-slate-900">Node 01: Silo &amp; Pakan Halal</div>
+<div class="text-[10px] text-slate-500 font-mono-val">Batch: HALAL-FEED-OK #8821</div>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-[#15803d]"></span>
+</div>
+<div class="grid grid-cols-3 gap-2 bg-white p-2 rounded border border-slate-200/60 text-center">
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Stok Total</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">12.45 Ton</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Suhu Silo</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">24.2°C</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Kelembaban</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">62% RH</span>
+</div>
+</div>
+</div>
+<!-- Connector 1->2 -->
+<div class="flex items-center justify-center -my-1.5">
+<div class="flex flex-col items-center text-slate-300">
+<div class="w-px h-3 bg-slate-300"></div>
+<span class="material-symbols-outlined text-[14px] -mt-1 text-slate-400">arrow_downward</span>
+</div>
+</div>
+<!-- Node 2: Kandang Closed House -->
+<div class="bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-md bg-emerald-50 text-[#166534] border border-emerald-200/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-[17px]">roofing</span>
+</div>
+<div>
+<div class="text-xs font-bold text-slate-900">Node 02: Kandang Broiler Alpha-01</div>
+<div class="text-[10px] text-[#166534] font-medium">Animal Welfare Standard</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-[#166534] border border-emerald-200/70 font-mono-val">
+                4.850 EKOR
+              </span>
+</div>
+<div class="grid grid-cols-3 gap-2 bg-white p-2 rounded border border-slate-200/60 text-center">
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Suhu Kandang</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">26.8°C</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Amonia (NH3)</span>
+<span class="font-mono-val text-xs font-bold text-[#166534]">8.2 ppm</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Fan SCADA</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">4 / 6 On</span>
+</div>
+</div>
+</div>
+<!-- Connector 2->3 -->
+<div class="flex items-center justify-center -my-1.5">
+<div class="flex flex-col items-center text-slate-300">
+<div class="w-px h-3 bg-slate-300"></div>
+<span class="material-symbols-outlined text-[14px] -mt-1 text-slate-400">arrow_downward</span>
+</div>
+</div>
+<!-- Node 3: Penjadwalan Panen & RPA Mitra -->
+<div class="bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-[17px]">agriculture</span>
+</div>
+<div>
+<div class="text-xs font-bold text-slate-900">Node 03: Panen &amp; RPA Terakreditasi</div>
+<div class="text-[10px] text-slate-500 font-mono-val">JULEHA Certified: ID-62</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200/70">
+                8 HARI LAGI
+              </span>
+</div>
+<div class="grid grid-cols-2 gap-2 bg-white p-2 rounded border border-slate-200/60 text-center">
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Target Tonase</span>
+<span class="font-mono-val text-xs font-bold text-slate-800">10.42 Ton</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Sertifikasi RPA</span>
+<span class="font-mono-val text-xs font-bold text-[#166534]">Terkunci (OK)</span>
+</div>
+</div>
+</div>
+<!-- Connector 3->4 -->
+<div class="flex items-center justify-center -my-1.5">
+<div class="flex flex-col items-center text-slate-300">
+<div class="w-px h-3 bg-slate-300"></div>
+<span class="material-symbols-outlined text-[14px] -mt-1 text-slate-400">arrow_downward</span>
+</div>
+</div>
+<!-- Node 4: Cold Storage Buffer -->
+<div class="bg-slate-50/70 p-3 rounded-lg border border-slate-200/70">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-md bg-slate-100 text-slate-700 border border-slate-200/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-[17px]">ac_unit</span>
+</div>
+<div>
+<div class="text-xs font-bold text-slate-900">Node 04: Cold Storage &amp; QR Label</div>
+<div class="text-[10px] text-slate-500">Rantai Dingin Halal &lt; -18°C</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                STANDBY
+              </span>
+</div>
+<div class="grid grid-cols-2 gap-2 bg-white p-2 rounded border border-slate-200/60 text-center">
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">Suhu Ruang</span>
+<span class="font-mono-val text-xs font-bold text-slate-700">-18.5°C</span>
+</div>
+<div>
+<span class="block text-[10px] text-slate-400 uppercase font-semibold">QR Dispatch</span>
+<span class="font-mono-val text-xs font-bold text-[#166534]">Auto-Gen Siap</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry & Verification Event Log -->
+<div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Log Verifikasi &amp; Telemetri</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500">
+<span class="w-1.5 h-1.5 rounded-full bg-[#15803d]"></span> Live Feed
+            </span>
+</div>
+<div class="space-y-2 font-mono-val text-xs text-slate-600 bg-slate-50/70 p-3 rounded-lg border border-slate-100">
+<div class="flex items-start gap-2">
+<span class="text-slate-400 text-[11px] shrink-0">14:47</span>
+<span class="text-[#166534] font-semibold shrink-0">[Silo 1]</span>
+<span class="text-slate-700 truncate">Sensor Amonia normal: 5.1 ppm (Aman)</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-slate-400 text-[11px] shrink-0">14:35</span>
+<span class="text-slate-700 font-semibold shrink-0">[BPJPH]</span>
+<span class="text-slate-700 truncate">Validasi berkala batch pakan #PK-8821 lolos</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-slate-400 text-[11px] shrink-0">14:10</span>
+<span class="text-amber-800 font-semibold shrink-0">[Storage]</span>
+<span class="text-slate-700 truncate">Kalibrasi temperatur cold storage -18.4°C</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Live Clock Script -->
+<script>
+    function updateLiveClock() {
+      const el = document.getElementById('system-clock');
+      if (!el) return;
+      const now = new Date();
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const pad = (n) => String(n).padStart(2, '0');
+      const d = pad(now.getDate());
+      const m = months[now.getMonth()];
+      const y = now.getFullYear();
+      const hh = pad(now.getHours());
+      const mm = pad(now.getMinutes());
+      el.textContent = `${d} ${m} ${y} · ${hh}:${mm} WIB`;
+    }
+    setInterval(updateLiveClock, 1000);
+    updateLiveClock();
+  </script>
+</body></html>

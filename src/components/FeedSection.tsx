@@ -34,8 +34,10 @@ export const FeedSection: React.FC<FeedSectionProps> = ({
   };
 
   const capacityPercent = Math.round((feed.feedStock / feed.maxFeedCapacity) * 100);
-  const siloAlphaPercent = Math.round((feed.siloAlphaStock / 1000) * 100);
-  const siloBetaPercent = Math.round((feed.siloBetaStock / 1000) * 100);
+  const alphaCap = feed.siloAlphaCapacity || 8000;
+  const betaCap = feed.siloBetaCapacity || 7000;
+  const siloAlphaPercent = Math.min(100, Math.round((feed.siloAlphaStock / alphaCap) * 100));
+  const siloBetaPercent = Math.min(100, Math.round((feed.siloBetaStock / betaCap) * 100));
 
   return (
     <section className="flex flex-col gap-4 sm:gap-5">
@@ -114,8 +116,8 @@ export const FeedSection: React.FC<FeedSectionProps> = ({
                 <span className="truncate">Silo Alpha (Pre-Starter)</span>
               </span>
               <span className="font-mono-val font-semibold text-[11px] sm:text-xs shrink-0">
-                {feed.siloAlphaStock} kg{' '}
-                <span className="text-slate-400 font-normal">/ 1.000</span>
+                {feed.siloAlphaStock.toLocaleString('id-ID')} kg{' '}
+                <span className="text-slate-400 font-normal">/ {alphaCap.toLocaleString('id-ID')}</span>
               </span>
             </div>
             <div className={`w-full rounded-full h-1.5 overflow-hidden ${
@@ -138,8 +140,8 @@ export const FeedSection: React.FC<FeedSectionProps> = ({
                 <span className="truncate">Silo Beta (Finisher)</span>
               </span>
               <span className="font-mono-val font-semibold text-[11px] sm:text-xs shrink-0">
-                {feed.siloBetaStock} kg{' '}
-                <span className="text-slate-400 font-normal">/ 1.000</span>
+                {feed.siloBetaStock.toLocaleString('id-ID')} kg{' '}
+                <span className="text-slate-400 font-normal">/ {betaCap.toLocaleString('id-ID')}</span>
               </span>
             </div>
             <div className={`w-full rounded-full h-1.5 overflow-hidden ${

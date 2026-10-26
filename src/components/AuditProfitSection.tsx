@@ -50,11 +50,11 @@ export const AuditProfitSection: React.FC<AuditProfitSectionProps> = ({
   const contributionPerBird = revenuePerBird - profit.variableCostPerBird;
   const calculatedBepBirds = contributionPerBird > 0
     ? Math.round(profit.fixedCost / contributionPerBird)
-    : 980;
+    : profit.bepBirds;
 
   // Semi-circle gauge arc computation (0 to 100% maps to 180 degrees)
-  const gaugePercent = sjph.sjphReadinessScore; // 78
-  const angleRad = (gaugePercent / 100) * Math.PI;
+  const gaugePercent = sjph.sjphReadinessScore;
+  const angleRad = (Math.min(100, Math.max(0, gaugePercent)) / 100) * Math.PI;
   const gaugeEndX = 100 - 80 * Math.cos(angleRad);
   const gaugeEndY = 100 - 80 * Math.sin(angleRad);
 
@@ -96,7 +96,7 @@ export const AuditProfitSection: React.FC<AuditProfitSectionProps> = ({
               ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
               : 'bg-emerald-50 text-[#166534] border-emerald-200'
           }`}>
-            {gaugePercent >= 80 ? 'Sangat Siap' : 'Tahap Pemenuhan (78%)'}
+            {gaugePercent >= 90 ? 'Sangat Siap (Audit-Ready)' : gaugePercent >= 80 ? 'Siap' : `Tahap Pemenuhan (${gaugePercent}%)`}
           </span>
         </div>
 
@@ -184,7 +184,7 @@ export const AuditProfitSection: React.FC<AuditProfitSectionProps> = ({
           isDark ? 'bg-amber-950/20 border-amber-500/20' : 'bg-amber-50/60 border-amber-200/50'
         }`}>
           <div className={`text-[10px] sm:text-[11px] font-medium ${isDark ? 'text-amber-300' : 'text-amber-900'}`}>
-            Ambang Batas BEP Panen (1.500 Ekor)
+            Ambang Batas BEP Panen ({profit.bepBirds > 2000 ? '4.850 Ekor' : '1.500 Ekor'})
           </div>
           <div className={`font-mono-val text-xl sm:text-2xl font-bold ${
             isDark ? 'text-white' : 'text-slate-900'

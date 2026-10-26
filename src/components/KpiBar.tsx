@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SjphCompliance, FeedMetrics, ProfitabilityMetrics } from '../data/mockData';
-import { CheckCircle2, ShieldCheck, Timer, TrendingUp } from 'lucide-react';
+import { CheckCircle2, Wheat, Scale, TrendingUp } from 'lucide-react';
 
 interface KpiBarProps {
   sjph: SjphCompliance;
@@ -16,57 +16,61 @@ export const KpiBar: React.FC<KpiBarProps> = ({
   profit,
   isDark,
 }) => {
+  const feedCapacityPercent = Math.min(100, Math.round((feed.feedStock / feed.maxFeedCapacity) * 100));
+  const isLargeFlock = profit.bepBirds > 2000;
+  const bepPercent = Math.min(100, Math.round((profit.bepBirds / (isLargeFlock ? 4850 : 1500)) * 100));
+
   const cards = [
     {
       id: 'kpi-sjph',
-      title: 'Kelengkapan Dokumen SJPH',
-      badge: `${sjph.sjphReadinessScore}% Terverifikasi`,
+      title: 'Kesiapan Audit SJPH',
+      badge: `${sjph.auditCountdownDays} Hari Menuju Audit`,
       badgeColor: 'emerald',
-      icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />,
+      icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />,
       mainValue: `${sjph.sjphReadinessScore}%`,
-      subValue: `dari total ${sjph.totalDocuments} poin`,
+      subValue: 'Target 100%',
       detailText: `${sjph.completedDocuments}/${sjph.totalDocuments} Dokumen Terverifikasi BPJPH`,
       progressPercent: sjph.sjphReadinessScore,
-      progressColor: 'bg-emerald-500',
+      progressColor: 'bg-emerald-600',
       glowClass: 'shadow-glow-emerald',
     },
     {
-      id: 'kpi-traceability',
-      title: 'Traceability Bahan Pakan',
-      badge: '100% Valid',
-      badgeColor: 'emerald',
-      icon: <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />,
-      mainValue: '100%',
-      subValue: '4/4 Bahan Lolos',
-      detailText: 'Lot #PK-8821 · Suplier Akreditasi Halal',
-      progressPercent: 100,
-      progressColor: 'bg-emerald-500',
-      glowClass: 'shadow-glow-emerald',
-    },
-    {
-      id: 'kpi-countdown',
-      title: 'Hari Menuju Audit SJPH',
-      badge: 'Countdown',
+      id: 'kpi-feed',
+      title: 'Sisa Stok Pakan Mandiri',
+      badge: `${feed.daysRemainingStock} Hari Tersisa`,
       badgeColor: 'amber',
-      icon: <Timer className="w-3.5 h-3.5 text-amber-400" />,
-      mainValue: `${sjph.auditCountdownDays}`,
-      subValue: 'Hari Lagi',
-      detailText: 'Simulasi Audit: 2 Nov 2026 (Alpha-01)',
-      progressPercent: 75,
+      icon: <Wheat className="w-3.5 h-3.5 text-amber-500" />,
+      mainValue: `${feed.feedStock.toLocaleString('id-ID')}`,
+      subValue: 'kg pakan',
+      detailText: `FCR ${feed.fcrActual} (Ref ${feed.fcrTarget}) · ${feed.dailyFeedConsumption} kg/hari`,
+      progressPercent: feedCapacityPercent,
       progressColor: 'bg-amber-500',
       glowClass: 'shadow-glow-amber',
     },
     {
-      id: 'kpi-savings',
-      title: 'Potensi Penghematan Biaya',
-      badge: 'Efisiensi FCR',
+      id: 'kpi-bep',
+      title: 'Titik Impas (BEP)',
+      badge: `Hari ke-${profit.bepHarvestDay}`,
       badgeColor: 'emerald',
-      icon: <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />,
-      mainValue: `Rp ${(profit.costSavingsEfficiency / 1000000).toFixed(2)} Jt`,
-      subValue: `FCR ${feed.fcrActual} (Ref: ${feed.fcrTarget})`,
-      detailText: `+14.2% Optimalisasi (1.500 Ekor)`,
-      progressPercent: 82,
-      progressColor: 'bg-emerald-500',
+      icon: <Scale className="w-3.5 h-3.5 text-emerald-500" />,
+      mainValue: `${profit.bepBirds.toLocaleString('id-ID')}`,
+      subValue: 'Ekor',
+      detailText: `Tercapai pada Hari ke-${profit.bepHarvestDay} dari 32 Hari Siklus`,
+      progressPercent: bepPercent,
+      progressColor: 'bg-emerald-600',
+      glowClass: 'shadow-glow-emerald',
+    },
+    {
+      id: 'kpi-profit',
+      title: 'Estimasi Laba Bersih',
+      badge: `Margin ${profit.profitMarginPercent}%`,
+      badgeColor: 'emerald',
+      icon: <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />,
+      mainValue: `Rp ${(profit.projectedNetProfit / 1000000).toFixed(2)} Jt`,
+      subValue: `Omset Rp ${(profit.projectedGrossRevenue / 1000000).toFixed(1)} Jt`,
+      detailText: `Efisiensi Pakan FCR: +Rp ${(profit.costSavingsEfficiency / 1000000).toFixed(2)} Jt`,
+      progressPercent: Math.min(100, Math.round(profit.profitMarginPercent * 3.5)),
+      progressColor: 'bg-emerald-600',
       glowClass: 'shadow-glow-emerald',
     },
   ];

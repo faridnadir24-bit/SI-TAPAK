@@ -26,3 +26,6 @@ dist-ssr
 # Temporary test screenshots
 vibe_check*.png
 mobile_preview*.png
+light_check*.png
+full_page*.png
+mobile_light*.png

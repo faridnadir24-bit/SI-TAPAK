@@ -21,10 +21,12 @@ export interface FeedMetrics {
   accumulatedFeedCost: number;
   siloAlphaStock: number;
   siloBetaStock: number;
+  siloAlphaCapacity: number;
+  siloBetaCapacity: number;
 }
 
 export interface SjphCompliance {
-  sjphReadinessScore: number; // in percent (78%)
+  sjphReadinessScore: number; // in percent (98.4 or 78)
   completedDocuments: number;
   totalDocuments: number;
   auditCountdownDays: number;
@@ -96,123 +98,113 @@ export interface TelemetryLog {
   level: 'info' | 'success' | 'warning';
 }
 
-export const mockFlockData: FlockOverview = {
-  flockSize: 1500,
+// Preset 1: Exact Stitch Original Design (4.850 Ekor / 12.450 kg / 98.4% / BEP 3.120 Ekor)
+export const stitchFlockData: FlockOverview = {
+  flockSize: 5000,
   unitName: "Closed-House Alpha-01",
-  batchId: "#BR-2026-04",
+  batchId: "#BR-2025-04",
   currentDay: 24,
   targetHarvestDay: 32,
-  mortalityCount: 18,
-  currentPopulation: 1482,
-  currentAvgWeightKg: 1.62,
+  mortalityCount: 150,
+  currentPopulation: 4850,
+  currentAvgWeightKg: 1.68,
   targetAvgWeightKg: 2.15,
 };
 
-export const mockFeedMetrics: FeedMetrics = {
-  feedStock: 1250, // 1.250 kg as instructed
-  maxFeedCapacity: 2000,
-  feedCostPerKg: 8500, // 8.500 Rp as instructed
-  dailyFeedConsumption: 148, // kg per day for 1.500 birds
-  daysRemainingStock: 8.4,
-  fcrActual: 1.46,
-  fcrTarget: 1.52,
-  accumulatedFeedCost: 28475000,
-  siloAlphaStock: 750,
-  siloBetaStock: 500,
+export const stitchFeedMetrics: FeedMetrics = {
+  feedStock: 12450,
+  maxFeedCapacity: 15000,
+  feedCostPerKg: 8750,
+  dailyFeedConsumption: 480,
+  daysRemainingStock: 25.9,
+  fcrActual: 1.48,
+  fcrTarget: 1.55,
+  accumulatedFeedCost: 108937500,
+  siloAlphaStock: 7200,
+  siloBetaStock: 5250,
+  siloAlphaCapacity: 8000,
+  siloBetaCapacity: 7000,
 };
 
-export const mockSjphCompliance: SjphCompliance = {
-  sjphReadinessScore: 78, // 78 % as instructed
-  completedDocuments: 39,
+export const stitchSjphCompliance: SjphCompliance = {
+  sjphReadinessScore: 98.4,
+  completedDocuments: 49,
   totalDocuments: 50,
   auditCountdownDays: 6,
   halalCertificateNumber: "ID32110001892830823",
   halalValidUntil: "28 November 2027",
-  blockchainLedgerHash: "0x8F92D74B4A9E...B31A",
+  blockchainLedgerHash: "0x8F92...B31A",
   feedHalalStatus: "BPJPH Aktif & Terverifikasi",
   rawMaterials: [
     { name: "Bungkil Kedelai Halal (Non-GMO Verified)", status: "verified", supplier: "PT Agro Makmur Halal" },
     { name: "Jagung Pipil Grade-A Domestik", status: "verified", supplier: "Koperasi Tani Nusantara" },
     { name: "Premix & Suplemen Mineral Halal MUI", status: "verified", supplier: "Bio Feed Nutrition Ltd" },
-    { name: "Enzim Fitase Terakreditasi Halal", status: "verified", supplier: "Enzyme Prime Asia" },
   ],
   pillars: [
-    { id: 1, title: "1. Komitmen & Manajemen Halal", score: 100, description: "Kebijakan halal & penunjukan penyelia halal tersertifikasi" },
-    { id: 2, title: "2. Bahan Baku & Air Minum", score: 92, description: "Traceability pakan 100% halal, uji laboratorium air bersih" },
-    { id: 3, title: "3. Pemeliharaan & Animal Welfare", score: 68, description: "Log book brooding & recording sirkulasi udara (tahap finalisasi)" },
-    { id: 4, title: "4. Kemitraan RPA JULEHA & Logistik", score: 75, description: "Verifikasi sertifikat RPH mitra & checklist armada bersih" },
+    { id: 1, title: "1. Komitmen & Tanggung Jawab", score: 100, description: "Kebijakan halal & penunjukan penyelia halal tersertifikasi" },
+    { id: 2, title: "2. Bahan Pakan & Air Minum", score: 100, description: "Traceability pakan 100% halal, uji laboratorium air bersih" },
+    { id: 3, title: "3. Pemeliharaan Halal (Animal Welfare)", score: 96.0, description: "Log book brooding & recording sirkulasi udara terpenuhi" },
+    { id: 4, title: "4. Kemitraan RPA Halal & Distribusi", score: 98.0, description: "RPA JULEHA ID-62 terakreditasi & armada rantai dingin" },
   ],
 };
 
-export const mockProfitability: ProfitabilityMetrics = {
-  fixedCost: 8200000,
-  variableCostPerBird: 18500,
+export const stitchProfitability: ProfitabilityMetrics = {
+  fixedCost: 22500000,
+  variableCostPerBird: 17200,
   sellingPricePerKg: 21500,
-  bepBirds: 980, // BEP reached at 980 birds
+  bepBirds: 3120,
   bepHarvestDay: 28,
-  projectedGrossRevenue: 68504000, // 1482 birds * 2.15 kg * 21500 Rp
-  projectedTotalCost: 35617000,
-  projectedNetProfit: 32887000,
-  costSavingsEfficiency: 4650000, // Efisiensi penghematan biaya pakan berkat FCR 1.46
+  projectedGrossRevenue: 224198750,
+  projectedTotalCost: 105920000,
+  projectedNetProfit: 38620000,
+  costSavingsEfficiency: 14850000,
   profitMarginPercent: 24.8,
 };
 
-// CVP Curve dataset for 0 to 1,500 birds (scaled to 1.500 ekor)
-export const mockCvpData: CvpDataPoint[] = [
-  { birds: 0, fixedCost: 8200000, totalCost: 8200000, revenue: 0 },
-  { birds: 300, fixedCost: 8200000, totalCost: 13750000, revenue: 13867500 },
-  { birds: 600, fixedCost: 8200000, totalCost: 19300000, revenue: 27735000 },
-  { birds: 980, fixedCost: 8200000, totalCost: 26330000, revenue: 45300500, isBep: true },
-  { birds: 1200, fixedCost: 8200000, totalCost: 30400000, revenue: 55470000 },
-  { birds: 1500, fixedCost: 8200000, totalCost: 35950000, revenue: 69337500 },
+export const stitchCvpData: CvpDataPoint[] = [
+  { birds: 0, fixedCost: 22500000, totalCost: 22500000, revenue: 0 },
+  { birds: 1500, fixedCost: 22500000, totalCost: 48300000, revenue: 69337500 },
+  { birds: 3120, fixedCost: 22500000, totalCost: 76164000, revenue: 144222000, isBep: true },
+  { birds: 4000, fixedCost: 22500000, totalCost: 91300000, revenue: 184900000 },
+  { birds: 4850, fixedCost: 22500000, totalCost: 105920000, revenue: 224198750 },
 ];
 
-export const mockTelemetryTrends: TelemetryTrendPoint[] = [
-  { day: "H-18", fcr: 1.38, temperature: 28.2, ammonia: 5.1, feedIntake: 125 },
-  { day: "H-19", fcr: 1.40, temperature: 27.8, ammonia: 5.4, feedIntake: 130 },
-  { day: "H-20", fcr: 1.42, temperature: 27.4, ammonia: 6.0, feedIntake: 136 },
-  { day: "H-21", fcr: 1.43, temperature: 26.9, ammonia: 6.2, feedIntake: 140 },
-  { day: "H-22", fcr: 1.45, temperature: 26.6, ammonia: 6.5, feedIntake: 144 },
-  { day: "H-23", fcr: 1.45, temperature: 26.5, ammonia: 6.7, feedIntake: 146 },
-  { day: "H-24", fcr: 1.46, temperature: 26.4, ammonia: 6.8, feedIntake: 148 },
-];
-
-export const mockDigitalTwinNodes: DigitalTwinNode[] = [
+export const stitchDigitalTwinNodes: DigitalTwinNode[] = [
   {
     id: "node-1",
     nodeNumber: "Node 01",
     title: "Silo & Pakan Halal",
     subtitle: "Batch: HALAL-FEED-OK #8821",
     status: "optimal",
-    badgeText: "STOK AMAN",
+    badgeText: "83% KAPASITAS",
     metrics: [
-      { label: "Stok Total", value: "1.250 kg", highlight: true },
+      { label: "Stok Total", value: "12.45 Ton", highlight: true },
       { label: "Suhu Silo", value: "24.2°C" },
-      { label: "Kelembaban", value: "58% RH" },
+      { label: "Kelembaban", value: "62% RH" },
     ],
   },
   {
     id: "node-2",
     nodeNumber: "Node 02",
     title: "Kandang Broiler Alpha-01",
-    subtitle: "Animal Welfare & Biosafety Std",
+    subtitle: "Animal Welfare Standard",
     status: "optimal",
-    badgeText: "1.482 EKOR",
+    badgeText: "4.850 EKOR",
     metrics: [
-      { label: "Suhu Kandang", value: "26.4°C" },
-      { label: "Amonia (NH3)", value: "6.8 ppm", highlight: true },
-      { label: "Fan SCADA", value: "3 / 4 On" },
+      { label: "Suhu Kandang", value: "26.8°C" },
+      { label: "Amonia (NH3)", value: "8.2 ppm", highlight: true },
+      { label: "Fan SCADA", value: "4 / 6 On" },
     ],
   },
   {
     id: "node-3",
     nodeNumber: "Node 03",
     title: "Panen & RPA Terakreditasi",
-    subtitle: "JULEHA Mitra ID-62 Tersertifikasi",
+    subtitle: "JULEHA Certified: ID-62",
     status: "normal",
     badgeText: "8 HARI LAGI",
     metrics: [
-      { label: "Target Tonase", value: "3.18 Ton" },
+      { label: "Target Tonase", value: "10.42 Ton" },
       { label: "Sertifikasi RPA", value: "Terkunci (OK)", highlight: true },
     ],
   },
@@ -230,40 +222,125 @@ export const mockDigitalTwinNodes: DigitalTwinNode[] = [
   },
 ];
 
-export const mockTelemetryLogs: TelemetryLog[] = [
+export const stitchTelemetryLogs: TelemetryLog[] = [
   {
     id: "log-1",
-    time: "13:12",
+    time: "14:47",
     source: "Silo 1",
-    message: "Sensor ultrasonik mendeteksi sisa stok pakan: 1.250 kg (Optimal).",
+    message: "Sensor Amonia normal: 5.1 ppm (Aman)",
     level: "success",
   },
   {
     id: "log-2",
-    time: "12:55",
+    time: "14:35",
     source: "BPJPH",
-    message: "Verifikasi otomatis sertifikat bahan premix ID32110001892830823 lolos.",
+    message: "Validasi berkala batch pakan #PK-8821 lolos",
     level: "success",
   },
   {
     id: "log-3",
-    time: "12:30",
-    source: "SCADA",
-    message: "Ventilasi tunnel fan otomatis aktif: sensor NH3 terbaca 6.8 ppm.",
+    time: "14:10",
+    source: "Storage",
+    message: "Kalibrasi temperatur cold storage -18.4°C",
     level: "info",
   },
   {
     id: "log-4",
-    time: "11:45",
-    source: "Storage",
-    message: "Kalibrasi berkala sensor termal buffer rantai dingin: -18.5°C normal.",
+    time: "13:20",
+    source: "Kandang",
+    message: "Tunnel ventilation SCADA switch: Fan 4 aktif otomatis.",
     level: "info",
   },
-  {
-    id: "log-5",
-    time: "10:15",
-    source: "SJPH",
-    message: "Checklist audit pilar 3 (Animal welfare log) diperbarui: skor 78%.",
-    level: "warning",
-  },
 ];
+
+// Preset 2: 1.500 Ekor (Khusus bila peternak memilih batch skala mikro)
+export const farm1500FlockData: FlockOverview = {
+  flockSize: 1500,
+  unitName: "Closed-House Alpha-01",
+  batchId: "#BR-2026-04",
+  currentDay: 24,
+  targetHarvestDay: 32,
+  mortalityCount: 18,
+  currentPopulation: 1482,
+  currentAvgWeightKg: 1.62,
+  targetAvgWeightKg: 2.15,
+};
+
+export const farm1500FeedMetrics: FeedMetrics = {
+  feedStock: 1250,
+  maxFeedCapacity: 2000,
+  feedCostPerKg: 8500,
+  dailyFeedConsumption: 148,
+  daysRemainingStock: 8.4,
+  fcrActual: 1.46,
+  fcrTarget: 1.52,
+  accumulatedFeedCost: 28475000,
+  siloAlphaStock: 750,
+  siloBetaStock: 500,
+  siloAlphaCapacity: 1000,
+  siloBetaCapacity: 1000,
+};
+
+export const farm1500SjphCompliance: SjphCompliance = {
+  sjphReadinessScore: 78,
+  completedDocuments: 39,
+  totalDocuments: 50,
+  auditCountdownDays: 6,
+  halalCertificateNumber: "ID32110001892830823",
+  halalValidUntil: "28 November 2027",
+  blockchainLedgerHash: "0x8F92...B31A",
+  feedHalalStatus: "BPJPH Aktif & Terverifikasi",
+  rawMaterials: [
+    { name: "Bungkil Kedelai Halal (Non-GMO Verified)", status: "verified", supplier: "PT Agro Makmur Halal" },
+    { name: "Jagung Pipil Grade-A Domestik", status: "verified", supplier: "Koperasi Tani Nusantara" },
+    { name: "Premix & Suplemen Mineral Halal MUI", status: "verified", supplier: "Bio Feed Nutrition Ltd" },
+  ],
+  pillars: [
+    { id: 1, title: "1. Komitmen & Tanggung Jawab", score: 100, description: "Kebijakan halal & penunjukan penyelia halal tersertifikasi" },
+    { id: 2, title: "2. Bahan Pakan & Air Minum", score: 92, description: "Traceability pakan 100% halal, uji laboratorium air bersih" },
+    { id: 3, title: "3. Pemeliharaan Halal (Animal Welfare)", score: 68, description: "Log book brooding & recording sirkulasi udara" },
+    { id: 4, title: "4. Kemitraan RPA Halal & Distribusi", score: 75, description: "RPA JULEHA ID-62 terakreditasi & checklist armada" },
+  ],
+};
+
+export const farm1500Profitability: ProfitabilityMetrics = {
+  fixedCost: 8200000,
+  variableCostPerBird: 18500,
+  sellingPricePerKg: 21500,
+  bepBirds: 980,
+  bepHarvestDay: 28,
+  projectedGrossRevenue: 68504000,
+  projectedTotalCost: 35617000,
+  projectedNetProfit: 32887000,
+  costSavingsEfficiency: 4650000,
+  profitMarginPercent: 24.8,
+};
+
+export const farm1500CvpData: CvpDataPoint[] = [
+  { birds: 0, fixedCost: 8200000, totalCost: 8200000, revenue: 0 },
+  { birds: 300, fixedCost: 8200000, totalCost: 13750000, revenue: 13867500 },
+  { birds: 600, fixedCost: 8200000, totalCost: 19300000, revenue: 27735000 },
+  { birds: 980, fixedCost: 8200000, totalCost: 26330000, revenue: 45300500, isBep: true },
+  { birds: 1200, fixedCost: 8200000, totalCost: 30400000, revenue: 55470000 },
+  { birds: 1500, fixedCost: 8200000, totalCost: 35950000, revenue: 69337500 },
+];
+
+export const mockTelemetryTrends: TelemetryTrendPoint[] = [
+  { day: "H-18", fcr: 1.40, temperature: 28.2, ammonia: 6.1, feedIntake: 420 },
+  { day: "H-19", fcr: 1.42, temperature: 27.8, ammonia: 6.4, feedIntake: 435 },
+  { day: "H-20", fcr: 1.44, temperature: 27.4, ammonia: 7.0, feedIntake: 450 },
+  { day: "H-21", fcr: 1.45, temperature: 26.9, ammonia: 7.2, feedIntake: 460 },
+  { day: "H-22", fcr: 1.46, temperature: 26.6, ammonia: 7.5, feedIntake: 470 },
+  { day: "H-23", fcr: 1.47, temperature: 26.5, ammonia: 7.8, feedIntake: 475 },
+  { day: "H-24", fcr: 1.48, temperature: 26.8, ammonia: 8.2, feedIntake: 480 },
+];
+
+// Default exports for backward compatibility & easy import
+export const mockFlockData = stitchFlockData;
+export const mockFeedMetrics = stitchFeedMetrics;
+export const mockSjphCompliance = stitchSjphCompliance;
+export const mockProfitability = stitchProfitability;
+export const mockCvpData = stitchCvpData;
+export const mockDigitalTwinNodes = stitchDigitalTwinNodes;
+export const mockTelemetryLogs = stitchTelemetryLogs;
+

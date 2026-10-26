@@ -1,14 +1,24 @@
 import { useState } from 'react';
 import {
-  mockFlockData,
-  mockFeedMetrics,
-  mockSjphCompliance,
-  mockProfitability,
-  mockCvpData,
-  mockDigitalTwinNodes,
-  mockTelemetryLogs,
+  stitchFlockData,
+  stitchFeedMetrics,
+  stitchSjphCompliance,
+  stitchProfitability,
+  stitchCvpData,
+  stitchDigitalTwinNodes,
+  stitchTelemetryLogs,
+  farm1500FlockData,
+  farm1500FeedMetrics,
+  farm1500SjphCompliance,
+  farm1500Profitability,
+  farm1500CvpData,
   FeedMetrics,
   TelemetryLog,
+  FlockOverview,
+  SjphCompliance,
+  ProfitabilityMetrics,
+  CvpDataPoint,
+  DigitalTwinNode,
 } from './data/mockData';
 import { Header } from './components/Header';
 import { KpiBar } from './components/KpiBar';
@@ -21,14 +31,17 @@ import { SupplierLogModal } from './components/SupplierLogModal';
 import { Wheat, ShieldCheck, Cpu, LayoutGrid } from 'lucide-react';
 
 export function App() {
-  const [isDark, setIsDark] = useState<boolean>(true);
-  const [flock] = useState(mockFlockData);
-  const [feed, setFeed] = useState<FeedMetrics>(mockFeedMetrics);
-  const [sjph] = useState(mockSjphCompliance);
-  const [profit] = useState(mockProfitability);
-  const [cvpData] = useState(mockCvpData);
-  const [nodes] = useState(mockDigitalTwinNodes);
-  const [logs, setLogs] = useState<TelemetryLog[]>(mockTelemetryLogs);
+  // Default to Stone Slate Editorial Light theme as shown in Stitch screenshot
+  const [isDark, setIsDark] = useState<boolean>(false);
+  const [currentPreset, setCurrentPreset] = useState<'stitch' | 'farm1500'>('stitch');
+
+  const [flock, setFlock] = useState<FlockOverview>(stitchFlockData);
+  const [feed, setFeed] = useState<FeedMetrics>(stitchFeedMetrics);
+  const [sjph, setSjph] = useState<SjphCompliance>(stitchSjphCompliance);
+  const [profit, setProfit] = useState<ProfitabilityMetrics>(stitchProfitability);
+  const [cvpData, setCvpData] = useState<CvpDataPoint[]>(stitchCvpData);
+  const [nodes, setNodes] = useState<DigitalTwinNode[]>(stitchDigitalTwinNodes);
+  const [logs, setLogs] = useState<TelemetryLog[]>(stitchTelemetryLogs);
 
   // Mobile navigation tab state
   const [mobileTab, setMobileTab] = useState<'all' | 'feed' | 'audit' | 'digital-twin'>('all');
@@ -39,11 +52,84 @@ export function App() {
   const [supplierLogModalOpen, setSupplierLogModalOpen] = useState<boolean>(false);
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (!isDark) {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+    }
+  };
+
+  const handleSelectPreset = (preset: 'stitch' | 'farm1500') => {
+    setCurrentPreset(preset);
+    if (preset === 'stitch') {
+      setFlock(stitchFlockData);
+      setFeed(stitchFeedMetrics);
+      setSjph(stitchSjphCompliance);
+      setProfit(stitchProfitability);
+      setCvpData(stitchCvpData);
+      setNodes(stitchDigitalTwinNodes);
+      setLogs(stitchTelemetryLogs);
+    } else {
+      setFlock(farm1500FlockData);
+      setFeed(farm1500FeedMetrics);
+      setSjph(farm1500SjphCompliance);
+      setProfit(farm1500Profitability);
+      setCvpData(farm1500CvpData);
+      // Adapted nodes for 1.500 flock
+      setNodes([
+        {
+          id: "node-1",
+          nodeNumber: "Node 01",
+          title: "Silo & Pakan Halal",
+          subtitle: "Batch: HALAL-FEED-OK #8821",
+          status: "optimal",
+          badgeText: "63% KAPASITAS",
+          metrics: [
+            { label: "Stok Total", value: "1.25 Ton", highlight: true },
+            { label: "Suhu Silo", value: "24.0°C" },
+            { label: "Kelembaban", value: "60% RH" },
+          ],
+        },
+        {
+          id: "node-2",
+          nodeNumber: "Node 02",
+          title: "Kandang Broiler Alpha-01",
+          subtitle: "Animal Welfare Standard",
+          status: "optimal",
+          badgeText: "1.482 EKOR",
+          metrics: [
+            { label: "Suhu Kandang", value: "26.5°C" },
+            { label: "Amonia (NH3)", value: "7.5 ppm", highlight: true },
+            { label: "Fan SCADA", value: "2 / 4 On" },
+          ],
+        },
+        {
+          id: "node-3",
+          nodeNumber: "Node 03",
+          title: "Panen & RPA Terakreditasi",
+          subtitle: "JULEHA Certified: ID-62",
+          status: "normal",
+          badgeText: "8 HARI LAGI",
+          metrics: [
+            { label: "Target Tonase", value: "3.19 Ton" },
+            { label: "Sertifikasi RPA", value: "Terkunci (OK)", highlight: true },
+          ],
+        },
+        {
+          id: "node-4",
+          nodeNumber: "Node 04",
+          title: "Cold Storage & QR Label",
+          subtitle: "Rantai Dingin Halal < -18°C",
+          status: "standby",
+          badgeText: "STANDBY",
+          metrics: [
+            { label: "Suhu Ruang", value: "-18.2°C" },
+            { label: "QR Dispatch", value: "Auto-Gen Siap", highlight: true },
+          ],
+        },
+      ]);
     }
   };
 
@@ -82,6 +168,9 @@ export function App() {
       <Header
         flock={flock}
         isDark={isDark}
+        sjphScore={sjph.sjphReadinessScore}
+        currentPreset={currentPreset}
+        onSelectPreset={handleSelectPreset}
         onToggleTheme={toggleTheme}
         onOpenExportModal={() => setExportModalOpen(true)}
       />
